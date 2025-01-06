@@ -11,10 +11,34 @@ header {
     color: white;
 }
 
-footer {
-    background: #757575;
+main {
+    max-width: 900px;
+    padding-right: 100px;
+    padding-left: 100px;
+    margin-right: auto;
+    margin-left: auto;
+    height: 43rem;
 }
 
+footer {
+    background: #757575;
+    margin-top: 1rem;
+}
+
+#title, #footer {
+    padding: 3rem;
+}
+
+#counter-list {
+    background-color: #000;
+    color: white;
+    padding: 0rem 0.25rem 0rem 0.25rem;
+}
+
+#frame-list {
+    background-color: #757575;
+    padding: 1rem;
+}
 
 
 
