@@ -14,21 +14,19 @@
 <body>
     <!-- HEADER -->
     <header>
-        <h1 id="title">
-            To do list
-        </h1>
+        <h1 id="title">To do list</h1>
     </header>
     
     <!-- MAIN -->
-    <main class="container">
-        <section >
+    <main>
+        <section>
             <div style="display: flex; justify-content: space-between;">
                 <h4 id="name-list">List</h4>
                 <p id="counter-list">0</p>
             </div>
-            <div>
+            <div id="frame-list">
                 <input id="inpt-description" type="text" placeholder="Description...">
-                <button id="btn-add" class="button"><i class="bi bi-check-square"></i></button>
+                <button id="btn-add"><i class="bi bi-check-square"></i></button>
                 <ol id="list-todo">
 
                 </ol>         
@@ -38,9 +36,7 @@
 
     <!-- FOOTER -->
     <footer>
-        <div>
-           ESTO ES EL FOOTER
-        </div>
+        <p id="footer">ESTO ES EL FOOTER</p>
     </footer>
     <script src="js/scripts.js"></script>
 </body>
