@@ -15,10 +15,17 @@ const itemAdd = () => {
         const newBtnDelete = document.createElement("button");
         //NEW ICON DELETE
         const newIconDelete = document.createElement("i");
+        //NEW BOTON EDIT
+        const newBtnEdit = document.createElement("button");
+        //NEW ICON EDIT
+        const newIconEdit = document.createElement("i");
         newItem.textContent = itemDescription;
-        newItem.className = "col-md-4 d-flex justify-content-between";
+        newItem.className = "col-md d-flex justify-content-between pt-1";
+        newIconEdit.className = "bi bi-pencil-square";
+        newBtnEdit.appendChild(newIconEdit);
         newIconDelete.className = "bi bi-x-square";
         newBtnDelete.appendChild(newIconDelete);
+        newItem.appendChild(newBtnEdit);
         newItem.appendChild(newBtnDelete);
         listTodo.appendChild(newItem);
 
