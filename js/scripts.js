@@ -9,7 +9,7 @@ let count = 0;
 
 
 //FUNCTION TO ADD ITEMS WHEN CLICK IN ADD BUTTON
-const itemAdd = () => {
+const handlerItemAdd = () => {
     if(validateDescription()){
         //NEW ITEM
         const newItem = document.createElement("li");
@@ -45,37 +45,58 @@ const itemAdd = () => {
         newItem.appendChild(newBtnDelete);
         listTodo.appendChild(newItem);
 
-        //FUNCTION TO DELETE ITEMS WHEN CLICK IN DELETE BUTTON
-        newBtnDelete.addEventListener("click", (e) => {
-            e.preventDefault();
-            newItem.remove();
-            counterItems();
+        //CALL FUNCTION TO DELETE ITEMS WHEN CLICK IN DELETE BUTTON
+        newBtnDelete.addEventListener("click", () => {
+            handlerItemDelete(newItem);
         });
 
-        //FUNCTION TO EDIT ITEMS WHEN CLICK IN EDIT BUTTON
-        newBtnEdit.addEventListener("click", (e) => {
-            e.preventDefault();
-            newItem.remove();
-            const newDescriptionEdited = document.createElement("input");
-            newDescriptionEdited.value = newItem.textContent;
-
-            newItem.innerHTML = "";
-            newItem.appendChild(newDescriptionEdited);
-
-            //NEW BOTON ADD
-            const newBtnAdd = document.createElement("button");
-
-            //NEW ICON ADD
-            const newIconAdd = document.createElement("i");
-            newIconAdd.className = "bi bi-check-square";
-
-            newBtnAdd.appendChild(newIconAdd);
-            newItem.appendChild(newBtnAdd);
-            listTodo.appendChild(newItem);
+        //CALL FUNCTION TO EDIT ITEMS WHEN CLICK IN EDIT BUTTON
+        newBtnEdit.addEventListener("click", () => {
+            handlerItemEdit(newItem, newBtnEdit, newBtnDelete);
         });
         counterItems();
     };
     clearInputs();
+};
+
+
+//FUNCTION TO DELETE ITEMS WHEN CLICK IN DELETE BUTTON
+const handlerItemDelete = (newItem) => {
+    newItem.remove();
+    counterItems();
+};
+
+
+//FUNCTION TO EDIT ITEMS WHEN CLICK IN EDIT BUTTON
+const handlerItemEdit = (newItem, newBtnEdit, newBtnDelete) => {
+    newItem.remove();
+    const newDescriptionEdited = document.createElement("input");
+    newDescriptionEdited.value = newItem.textContent;
+
+    newItem.innerHTML = "";
+    newItem.appendChild(newDescriptionEdited);
+
+    //NEW BOTON ADD
+    const newBtnAdd = document.createElement("button");
+    newBtnAdd.addEventListener("click", (e) => {
+        e.preventDefault();
+        newItem.remove();
+        const newItemEdited = document.createElement("li");
+        const newDescriptionEditedSave = document.createElement("p");
+        newDescriptionEditedSave.textContent = newDescriptionEdited.value;
+        newItemEdited.appendChild(newDescriptionEditedSave);
+        newItemEdited.appendChild(newBtnEdit);
+        newItemEdited.appendChild(newBtnDelete);
+        listTodo.appendChild(newItemEdited);
+    });
+
+    //NEW ICON ADD
+    const newIconAdd = document.createElement("i");
+    newIconAdd.className = "bi bi-check-square";
+
+    newBtnAdd.appendChild(newIconAdd);
+    newItem.appendChild(newBtnAdd);
+    listTodo.appendChild(newItem);
 };
 
 
@@ -101,7 +122,6 @@ const validateDescription = () => {
     else{
         return true;
     };
-    
 };
 
 
@@ -109,6 +129,6 @@ const validateDescription = () => {
 document.addEventListener("DOMContentLoaded", function() {
     btnAdd.addEventListener("click", (e) => {
         e.preventDefault();
-        itemAdd();
+        handlerItemAdd();
     });
 });
