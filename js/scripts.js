@@ -5,78 +5,97 @@ const btnAdd = document.getElementById("btn-add");
 const listTodo = document.getElementById("list-todo");
 
 
+//VARIABLES
 let count = 0;
 
 
 //FUNCTION TO ADD ITEMS WHEN CLICK IN ADD BUTTON
-const itemAdd = () => {
-    if(validateDescription()){
-        //NEW ITEM
-        const newItem = document.createElement("li");
-        newItem.id = `item${count}`
-        count += 1;
+const handlerItemAdd = (item = "") => {
+    //NEW ITEM
+    const newItem = document.createElement("li");
+    newItem.id = `item${count}`
+    count += 1;
 
-        //NEW BOTON DELETE
-        const newBtnDelete = document.createElement("button");
+    //NEW BOTON DELETE
+    const newBtnDelete = document.createElement("button");
 
-        //NEW ICON DELETE
-        const newIconDelete = document.createElement("i");
+    //NEW ICON DELETE
+    const newIconDelete = document.createElement("i");
 
-        //NEW BOTON EDIT
-        const newBtnEdit = document.createElement("button");
+    //NEW BOTON EDIT
+    const newBtnEdit = document.createElement("button");
 
-        //NEW ICON EDIT
-        const newIconEdit = document.createElement("i");
+    //NEW ICON EDIT
+    const newIconEdit = document.createElement("i");
 
-        //NEW DESCRIPTION
-        const newDescription = document.createElement("p");
-        newDescription.textContent = inptDescription.value;
+    //NEW DESCRIPTION
+    const newDescription = document.createElement("p");
 
-        newItem.className = "col-md d-flex justify-content-between pt-1";
+    newDescription.className = "description";
 
-        newIconEdit.className = "bi bi-pencil-square";
-        newBtnEdit.appendChild(newIconEdit);
+    //CHECKING IF ITEM IS EMPTY OR NOT FOR ADDING DESCRIPTION
+    newDescription.textContent = item != "" ? item : inptDescription.value;
 
-        newIconDelete.className = "bi bi-x-square";
-        newBtnDelete.appendChild(newIconDelete);
+    newItem.className = "col-md pt-1";
 
-        newItem.appendChild(newDescription);
-        newItem.appendChild(newBtnEdit);
-        newItem.appendChild(newBtnDelete);
+    newIconEdit.className = "bi bi-pencil-square";
+    newBtnEdit.appendChild(newIconEdit);
+
+    newIconDelete.className = "bi bi-x-square";
+    newBtnDelete.appendChild(newIconDelete);
+
+    newItem.appendChild(newDescription);
+    newItem.appendChild(newBtnEdit);
+    newItem.appendChild(newBtnDelete);
+    listTodo.appendChild(newItem);
+
+    //CALL FUNCTION TO DELETE ITEMS WHEN CLICK IN DELETE BUTTON
+    newBtnDelete.addEventListener("click", () => {
+        handlerItemDelete(newItem);
+    });
+
+    //CALL FUNCTION TO EDIT ITEMS WHEN CLICK IN EDIT BUTTON
+    newBtnEdit.addEventListener("click", () => {
+        handlerItemEdit(newItem);
+    });
+    counterItems();
+    clearInputs();
+};
+
+
+//FUNCTION TO DELETE ITEMS WHEN CLICK IN DELETE BUTTON
+const handlerItemDelete = (newItem) => {
+    newItem.remove();
+    counterItems();
+};
+
+
+//FUNCTION TO EDIT ITEMS WHEN CLICK IN EDIT BUTTON
+const handlerItemEdit = (newItem) => {
+        const newDescriptionEdited = document.createElement("input");
+        newDescriptionEdited.value = newItem.textContent;
+        console.log(newDescriptionEdited.value);
+    
+        newItem.innerHTML = "";
+        newItem.appendChild(newDescriptionEdited);
+    
+        //NEW BOTON ADD
+        const newBtnAdd = document.createElement("button");
+            
+        //NEW ICON ADD
+        const newIconAdd = document.createElement("i");
+        newIconAdd.className = "bi bi-check-square";
+
+        newBtnAdd.appendChild(newIconAdd);
+        newItem.appendChild(newBtnAdd);
         listTodo.appendChild(newItem);
-
-        //FUNCTION TO DELETE ITEMS WHEN CLICK IN DELETE BUTTON
-        newBtnDelete.addEventListener("click", (e) => {
+        newBtnAdd.addEventListener("click", (e) => {
             e.preventDefault();
+            handlerItemAdd(newDescriptionEdited.value);
             newItem.remove();
             counterItems();
         });
-
-        //FUNCTION TO EDIT ITEMS WHEN CLICK IN EDIT BUTTON
-        newBtnEdit.addEventListener("click", (e) => {
-            e.preventDefault();
-            newItem.remove();
-            const newDescriptionEdited = document.createElement("input");
-            newDescriptionEdited.value = newItem.textContent;
-
-            newItem.innerHTML = "";
-            newItem.appendChild(newDescriptionEdited);
-
-            //NEW BOTON ADD
-            const newBtnAdd = document.createElement("button");
-
-            //NEW ICON ADD
-            const newIconAdd = document.createElement("i");
-            newIconAdd.className = "bi bi-check-square";
-
-            newBtnAdd.appendChild(newIconAdd);
-            newItem.appendChild(newBtnAdd);
-            listTodo.appendChild(newItem);
-        });
-        counterItems();
     };
-    clearInputs();
-};
 
 
 //FUNCTION TO COUNTER ITEMS WHEN IS ADD OR DELETE ITEMS
@@ -101,14 +120,23 @@ const validateDescription = () => {
     else{
         return true;
     };
-    
 };
 
 
 //READY
 document.addEventListener("DOMContentLoaded", function() {
     btnAdd.addEventListener("click", (e) => {
-        e.preventDefault();
-        itemAdd();
+        if(validateDescription()){
+            e.preventDefault();
+            handlerItemAdd();
+        };
+    });
+    inptDescription.addEventListener("keydown", (e) => {
+        if(e.key === "Enter"){
+            if(validateDescription()){
+                e.preventDefault();
+                handlerItemAdd();
+            };
+        };
     });
 });
