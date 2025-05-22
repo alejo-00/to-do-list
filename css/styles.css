@@ -11,10 +11,60 @@ header {
     color: white;
 }
 
-footer {
-    background: #757575;
+main {
+    max-width: 900px;
+    padding-right: 100px;
+    padding-left: 100px;
+    margin-right: auto;
+    margin-left: auto;
+    height: 43rem;
 }
 
+footer {
+    background: #757575;
+    width: 100%;
+}
+
+button {
+    width: 40px;
+    height: 30px; 
+    flex-shrink: 0;
+}
+
+li {
+    display: flex;              
+    align-items: center;        
+    justify-content: space-between; 
+    gap: 10px;
+    padding: 0.5rem;
+    margin: 1rem;
+    background: white;
+}
+
+.description {
+    width: 100%;
+    max-width: 450px;
+    word-wrap: break-word;
+}
+
+#title, #footer {
+    padding: 3rem;
+}
+
+#counter-list {
+    background-color: #000;
+    color: white;
+    padding: 0rem 0.5rem 0rem 0.5rem;
+}
+
+#frame-list {
+    background-color: #757575;
+    padding: 1rem;
+}
+
+#list-todo {
+    list-style: none;
+}
 
 
 
