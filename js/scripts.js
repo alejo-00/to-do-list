@@ -59,6 +59,7 @@ const handlerItemAdd = (item = "") => {
         handlerItemEdit(newItem);
     });
     counterItems();
+    saveItems();
     clearInputs();
 };
 
@@ -67,6 +68,7 @@ const handlerItemAdd = (item = "") => {
 const handlerItemDelete = (newItem) => {
     newItem.remove();
     counterItems();
+    saveItems();
 };
 
 
@@ -95,13 +97,35 @@ const handlerItemEdit = (newItem) => {
             newItem.remove();
             counterItems();
         });
-    };
+};
 
 
 //FUNCTION TO COUNTER ITEMS WHEN IS ADD OR DELETE ITEMS
 const counterItems = () => {
     const count_items = document.getElementsByTagName("li");
     counterList.textContent = count_items.length;
+};
+
+
+//FUNCTION TO SAVE ITEMS IN LOCAL STORAGE FOR PERSISTENCE AND LOAD LATER
+const saveItems = () => {
+    const items = document.getElementsByTagName("li");
+    const listaItems = [];
+    for (let i = 0; i < items.length; i++) {
+        listaItems.push(items[i].textContent);
+    };
+    localStorage.setItem("todoList", JSON.stringify(listaItems));
+};
+
+
+//FUNCTION TO LOAD ITEMS FROM LOCAL STORAGE WHEN PAGE IS LOADED
+const loadItems = () => {
+    const items = JSON.parse(localStorage.getItem("todoList"));
+    if (items) {
+        items.forEach(item => {
+            handlerItemAdd(item);
+        });
+    };
 };
 
 
@@ -125,15 +149,16 @@ const validateDescription = () => {
 
 //READY
 document.addEventListener("DOMContentLoaded", function() {
+    loadItems();
     btnAdd.addEventListener("click", (e) => {
-        if(validateDescription()){
+        if (validateDescription()) {
             e.preventDefault();
             handlerItemAdd();
         };
     });
     inptDescription.addEventListener("keydown", (e) => {
-        if(e.key === "Enter"){
-            if(validateDescription()){
+        if (e.key === "Enter") {
+            if (validateDescription()) {
                 e.preventDefault();
                 handlerItemAdd();
             };
