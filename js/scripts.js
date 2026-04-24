@@ -6,15 +6,24 @@ const listTodo = document.getElementById("list-todo");
 
 
 //VARIABLES
-let count = 0;
+// let count = 0;
+
+
+//FUNCTION TO CREATE ITEMS FOR THE LIST
+const handlerCreateItem = () => {
+    const newItem = document.createElement("li");
+    return newItem;
+    // newItem.id = `item${count}`
+};
 
 
 //FUNCTION TO ADD ITEMS WHEN CLICK IN ADD BUTTON
 const handlerItemAdd = (item = "") => {
     //NEW ITEM
-    const newItem = document.createElement("li");
-    newItem.id = `item${count}`
-    count += 1;
+    const newItem = handlerCreateItem();
+    // const newItem = document.createElement("li");
+    // newItem.id = `item${count}`
+    // count += 1;
 
     //NEW BOTON DELETE
     const newBtnDelete = document.createElement("button");
@@ -74,29 +83,46 @@ const handlerItemDelete = (newItem) => {
 
 //FUNCTION TO EDIT ITEMS WHEN CLICK IN EDIT BUTTON
 const handlerItemEdit = (newItem) => {
-        const newDescriptionEdited = document.createElement("input");
-        newDescriptionEdited.value = newItem.textContent;
-        console.log(newDescriptionEdited.value);
-    
-        newItem.innerHTML = "";
-        newItem.appendChild(newDescriptionEdited);
-    
-        //NEW BOTON ADD
-        const newBtnAdd = document.createElement("button");
-            
-        //NEW ICON ADD
-        const newIconAdd = document.createElement("i");
-        newIconAdd.className = "bi bi-check-square";
+    const description = newItem.querySelector(".description");
+    const editBtn = newItem.querySelectorAll("button")[0];
 
-        newBtnAdd.appendChild(newIconAdd);
-        newItem.appendChild(newBtnAdd);
-        listTodo.appendChild(newItem);
-        newBtnAdd.addEventListener("click", (e) => {
-            e.preventDefault();
-            handlerItemAdd(newDescriptionEdited.value);
-            newItem.remove();
-            counterItems();
-        });
+    // Evitar múltiples inputs si el usuario hace clic en editar varias veces
+    if (newItem.querySelector("input")) return;
+
+    const newDescriptionEdited = document.createElement("input");
+    newDescriptionEdited.value = description.textContent;
+
+    // Ocultar la descripción y el botón de editar temporalmente
+    description.style.display = "none";
+    editBtn.style.display = "none";
+
+    newItem.insertBefore(newDescriptionEdited, editBtn);
+
+    //NEW BOTON ADD PARA GUARDAR EDICION
+    const newBtnAdd = document.createElement("button");
+    const newIconAdd = document.createElement("i");
+    newIconAdd.className = "bi bi-check-square";
+
+    newBtnAdd.appendChild(newIconAdd);
+    newItem.insertBefore(newBtnAdd, editBtn);
+
+    newBtnAdd.addEventListener("click", (e) => {
+        e.preventDefault();
+        
+        // Actualizar el valor de la descripción
+        description.textContent = newDescriptionEdited.value;
+        
+        // Restaurar a la vista normal
+        description.style.display = "block";
+        editBtn.style.display = "inline-block";
+        
+        // Remover el input y el botón de confirmar edición
+        newDescriptionEdited.remove();
+        newBtnAdd.remove();
+        
+        // Guardar cambios
+        saveItems();
+    });
 };
 
 
@@ -112,7 +138,10 @@ const saveItems = () => {
     const items = document.getElementsByTagName("li");
     const listaItems = [];
     for (let i = 0; i < items.length; i++) {
-        listaItems.push(items[i].textContent);
+        const desc = items[i].querySelector(".description");
+        if (desc) {
+            listaItems.push(desc.textContent);
+        }
     };
     localStorage.setItem("todoList", JSON.stringify(listaItems));
 };
@@ -137,7 +166,8 @@ const clearInputs = () => {
 
 //FUNCTION TO VALIDATE DESCRIPTION CONTENT CAN NOT BE EMPTY
 const validateDescription = () => {
-    if(inptDescription.value == ""){
+    //USE TRIM TO REMOVE WHITESPACE
+    if(inptDescription.value.trim() == ""){
         alert("Error! a description must be entered");
         return false;
     }
